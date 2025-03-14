@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ post.title }}</h1>
+    <p><strong>Автор:</strong> {{ post.author }}</p>
+    <p><strong>Дата публикации:</strong> {{ post.date }}</p>
+    <img src="{{ url_for('static', filename='images/' + post.image_id) }}" alt="Изображение поста" class="img-fluid my-3">
+    <p>{{ post.text }}</p>
+
+    <h2>Комментарии</h2>
+    {% for comment in post.comments %}
+        <div class="card my-2 p-3">
+            <strong>{{ comment.author }}</strong>: {{ comment.text }}
+            {% if comment.replies %}
+                <div class="ms-4">
+                    {% for reply in comment.replies %}
+                        <div class="border-start ps-3">
+                            <strong>{{ reply.author }}</strong>: {{ reply.text }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div class="mt-4">
+        <h3>Оставить комментарий</h3>
+        <form method="POST">
+          <div class="mb-3">
+            <label for="commentText" class="form-label">Ваш комментарий:</label>
+            <textarea class="form-control" id="commentText" name="commentText" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
