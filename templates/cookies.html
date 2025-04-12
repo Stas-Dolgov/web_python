@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Cookies{% endblock %}
+
+{% block content %}
+    <h1>Cookies</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cookie</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cookie, value in cookies.items() %}
+                <tr>
+                    <td>{{ cookie }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

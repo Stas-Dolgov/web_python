@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Headers{% endblock %}
+
+{% block content %}
+    <h1>Заголовки запроса</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Header</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for header, value in headers.items() %}
+                <tr>
+                    <td>{{ header }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
