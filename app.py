@@ -1,6 +1,8 @@
 import random
-from flask import Flask, render_template, request, redirect, url_for
+import re
+from flask import Flask, render_template, request, make_response, redirect, url_for
 from faker import Faker
+from werkzeug.exceptions import BadRequest
 
 fake = Faker()
 
@@ -34,6 +36,25 @@ def generate_post(i):
 
 posts_list = sorted([generate_post(i) for i in range(5)], key=lambda p: p['date'], reverse=True)
 
+def format_phone_number(phone_number):
+    digits = re.sub(r'\D', '', phone_number)
+    country_code = ""
+    
+    if len(digits) == 10:
+        country_code = "+7"
+    elif digits.startswith('7'):
+        country_code = "+7"
+        digits = digits[1:]
+    elif digits.startswith('8'):
+        country_code = "+7"
+        digits = digits[1:]
+
+    if len(digits) == 10 or (len(digits) == 11 and digits.startswith(('2', '3', '4', '5', '6', '7', '8', '9'))):
+        return f"{country_code} ({digits[:3]}) {digits[3:6]}-{digits[6:8]}-{digits[8:10]}"
+
+    else:
+        return "Invalid phone number format"
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -62,6 +83,48 @@ def post(index):
 @app.route('/about')
 def about():
     return render_template('about.html', title='Об авторе')
+
+@app.route('/url_params/<path:path>')
+def url_params(path):
+    return render_template('url_params.html', path=path)
+
+@app.route('/headers')
+def headers():
+    headers = request.headers
+    return render_template('headers.html', headers=headers)
+
+@app.route('/cookies')
+def cookies():
+    cookies = request.cookies
+    return render_template('cookies.html', cookies=cookies)
+
+@app.route('/form_params', methods=['GET', 'POST'])
+def form_params():
+    form_data = {}
+    if request.method == 'POST':
+        form_data = request.form
+    return render_template('form_params.html', form_data=form_data)
+
+@app.route('/phone', methods=['GET', 'POST'])
+def phone():
+    if request.method == 'POST':
+        phone_number = request.form.get('phone')
+
+        if not phone_number:
+            return render_template('phone.html', error="Пожалуйста, введите номер телефона.", phone_number=phone_number)
+
+        cleaned_number = re.sub(r'[()\s\-.]', '', phone_number)
+
+        if not cleaned_number.isdigit():
+            return render_template('phone.html', error="Недопустимый ввод. В номере телефона встречаются недопустимые символы.", phone_number=phone_number)
+
+        if not (len(cleaned_number) == 10 or (len(cleaned_number) == 11 and cleaned_number.startswith(('7', '8')))):
+            return render_template('phone.html', error="Недопустимый ввод. Неверное количество цифр.", phone_number=phone_number)
+
+        formatted_number = format_phone_number(phone_number)
+        return render_template('phone.html', formatted_number=formatted_number, phone_number=phone_number)
+
+    return render_template('phone.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
