@@ -21,7 +21,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-              <a class="navbar-brand" href="{{ url_for('index') }}">Лабораторная работа № 1</a>
+              <a class="navbar-brand" href="{{ url_for('index') }}">Главная</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -35,6 +35,8 @@
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="{{ url_for('about') }}">Об авторе</a>
+<<<<<<< HEAD
+=======
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="{{ url_for('url_params', path='/index.html') }}">Параметры(url)</a>
@@ -50,7 +52,35 @@
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" aria-current="page" href="{{ url_for('phone') }}">Телефон</a>
+>>>>>>> 4ea8a5296b6f50aef8da3650ca85e6452a1bb5d6
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('url_params', path='/index.html') }}">Параметры(url)</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('form_params') }}">Параметры(form)</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" aria-current="page" href="{{ url_for('headers') }}">Заголовки</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" aria-current="page" href="{{ url_for('cookies') }}">Куки</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" aria-current="page" href="{{ url_for('phone') }}">Телефон</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('visits') }}">Посещения</a>
+                  </li>
+                  {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                      <a class="nav-link" aria-current="page" href="{{ url_for('secret') }}">Секретно</a>
+                    </li>
+                  {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Войти</a>
+                    </li>
+                {% endif %}
                 </ul>
               </div>
             </div>
